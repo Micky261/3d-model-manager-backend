@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThreeDModelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware("auth:api")->get("/user", function (Request $request) {
     return $request->user();
 });
+
+Route::get("models", [ThreeDModelController::class, "getAllModels"]);
+Route::get("models/random/{num}", [ThreeDModelController::class, "getRandomModels"]);
+Route::get("model/{id}", [ThreeDModelController::class, "getModel"]);
+Route::post("model", [ThreeDModelController::class, "createModel"]);
+Route::put("model/{id}", [ThreeDModelController::class, "updateModel"]);
+Route::delete("model/{id}", [ThreeDModelController::class, "deleteModel"]);
+
