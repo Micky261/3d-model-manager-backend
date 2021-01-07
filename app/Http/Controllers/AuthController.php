@@ -50,10 +50,10 @@ class AuthController extends Controller {
             $credentials = request(["email", "password"]);
 
             if (!Auth::attempt($credentials)) {
-                return response()->json(                    [
-                        "msg" => "Incorrect user data",
-                        "msg_code" => "USER_DATA_INCORRECT"
-                    ],                     403);
+                return response()->json([
+                    "message" => "Incorrect user data",
+                    "message_code" => "USER_DATA_INCORRECT"
+                ], 403);
             }
 
             $user = User::where("email", $request->email)->first();
@@ -70,9 +70,8 @@ class AuthController extends Controller {
             ]);
         } catch (Exception $error) {
             return response()->json([
-                "msg" => "Error on login",
-                "msg_code" => "LOGIN_ERROR",
-                "error" => $error,
+                "message" => "Error on login",
+                "message_code" => "LOGIN_ERROR"
             ], $error->status);
         }
     }
