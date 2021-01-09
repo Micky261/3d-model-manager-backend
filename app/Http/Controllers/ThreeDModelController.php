@@ -56,10 +56,10 @@ class ThreeDModelController extends Controller {
             $threeDModel = ThreeDModel::find($id);
             $threeDModel->name = is_null($request->name) ? $threeDModel->name : $request->name;
             $threeDModel->links = is_null($request->links) ? $threeDModel->links : $request->links;
-            $threeDModel->description =is_null( $request->description) ? $threeDModel->description : $request->description;
+            $threeDModel->description = is_null($request->description) ? $threeDModel->description : $request->description;
             $threeDModel->notes = is_null($request->notes) ? $threeDModel->notes : $request->notes;
             $threeDModel->favorite = is_null($request->favorite) ? $threeDModel->favorite : $request->favorite;
-            $threeDModel->author =is_null( $request->author) ? $threeDModel->author : $request->author;
+            $threeDModel->author = is_null($request->author) ? $threeDModel->author : $request->author;
             $threeDModel->licence = is_null($request->licence) ? $threeDModel->licence : $request->licence;
             $threeDModel->save();
 
