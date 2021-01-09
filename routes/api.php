@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ThreeDModelController;
+use App\Http\Controllers\ModelTagsController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,10 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::post("model/import", [ThreeDModelController::class, "importModel"]);
     Route::put("model/{id}", [ThreeDModelController::class, "updateModel"]);
     Route::delete("model/{id}", [ThreeDModelController::class, "deleteModel"]);
+
+    Route::get("model/{id}/tags", [ModelTagsController::class, "getTags"]);
+    Route::post("model/{id}/{tag}", [ModelTagsController::class, "setTag"]);
+    Route::delete("model/{id}/{tag}", [ModelTagsController::class, "removeTag"]);
 });
 
 // Login / Register
