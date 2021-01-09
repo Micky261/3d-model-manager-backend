@@ -15,17 +15,17 @@ class CreateThreeDModelTable extends Migration {
             $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->string("name");
-            $table->string("imported_name");
+            $table->string("imported_name")->default("null");
             $table->longText("description");
-            $table->longText("imported_description");
+            $table->longText("imported_description")->default("null");
             $table->longText("notes");
             $table->json("links");
             $table->boolean("favorite");
             $table->string("author");
-            $table->string("imported_author");
+            $table->string("imported_author")->default("null");
             $table->string("licence");
-            $table->string("imported_licence");
-            $table->string("import_source");
+            $table->string("imported_licence")->default("null");
+            $table->string("import_source")->default("null");
             $table->timestamps();
         });
     }
