@@ -22,6 +22,12 @@ class ThreeDModelController extends Controller {
         return response()->json($threeDModel);
     }
 
+    public function importModel(Request $request): JsonResponse {
+        echo $request->url;
+
+        return response()->json();
+    }
+
     public function getModel(int $id): JsonResponse|Response {
         if (ThreeDModel::where("id", $id)->exists()) {
             $threeDModel = ThreeDModel::where("id", $id)->get()[0];

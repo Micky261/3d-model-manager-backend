@@ -26,6 +26,7 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::get("models/random/{num}", [ThreeDModelController::class, "getRandomModels"]);
     Route::get("model/{id}", [ThreeDModelController::class, "getModel"]);
     Route::post("model", [ThreeDModelController::class, "createModel"]);
+    Route::post("model/import", [ThreeDModelController::class, "importModel"]);
     Route::put("model/{id}", [ThreeDModelController::class, "updateModel"]);
     Route::delete("model/{id}", [ThreeDModelController::class, "deleteModel"]);
 });
