@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServerMessage;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
@@ -29,17 +30,17 @@ class VerificationController extends Controller {
         $user = User::where("email", $request->email)->first();
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json([
+            return response()->json(new ServerMessage([
                 "message" => "Already verified",
                 "message_code" => "ALREADY_VERIFIED"
-            ]);
+            ]));
         } else {
             $user->sendEmailVerificationNotification();
 
-            return response()->json([
+            return response()->json(new ServerMessage([
                 "message" => "Success",
                 "message_code" => "SUCCESS"
-            ]);
+            ]));
         }
     }
 
@@ -54,19 +55,19 @@ class VerificationController extends Controller {
         $user = User::where("id", $id)->first();
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json([
+            return response()->json(new ServerMessage([
                 "message" => "Already verified",
                 "message_code" => "ALREADY_VERIFIED"
-            ]);
+            ]));
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return response()->json([
+        return response()->json(new ServerMessage([
             "message" => "Success",
             "message_code" => "SUCCESS"
-        ]);
+        ]));
     }
 }

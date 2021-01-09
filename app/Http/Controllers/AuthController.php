@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServerMessage;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Events\Registered;
@@ -13,10 +14,10 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller {
     public function register(Request $request): JsonResponse {
         if (User::where("email", $request->email)->exists()) {
-            return response()->json([
+            return response()->json(new ServerMessage([
                 "message" => "User already exists.",
                 "message_code" => "USER_ALREADY_EXISTS"
-            ], 409);
+            ]), 409);
         }
 
         $request->validate([
@@ -34,10 +35,10 @@ class AuthController extends Controller {
 
         event(new Registered($user));
 
-        return response()->json([
+        return response()->json(new ServerMessage([
             "message" => "Success",
             "message_code" => "SUCCESS"
-        ]);
+        ]));
     }
 
     public function login(Request $request): JsonResponse {
@@ -50,10 +51,10 @@ class AuthController extends Controller {
             $credentials = request(["email", "password"]);
 
             if (!Auth::attempt($credentials)) {
-                return response()->json([
+                return response()->json(new ServerMessage([
                     "message" => "Incorrect user data",
                     "message_code" => "USER_DATA_INCORRECT"
-                ], 403);
+                ]), 403);
             }
 
             $user = User::where("email", $request->email)->first();
@@ -69,10 +70,10 @@ class AuthController extends Controller {
                 "token_type" => "Bearer",
             ]);
         } catch (Exception $error) {
-            return response()->json([
+            return response()->json(new ServerMessage([
                 "message" => "Error on login",
                 "message_code" => "LOGIN_ERROR"
-            ], $error->status);
+            ]), $error->status);
         }
     }
 }

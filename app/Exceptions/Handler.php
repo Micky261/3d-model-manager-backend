@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Models\ServerMessage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
@@ -47,9 +48,9 @@ class Handler extends ExceptionHandler {
      * @return JsonResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception): JsonResponse {
-        return response()->json([
+        return response()->json(new ServerMessage([
             "message" => "Unauthenticated",
             "message_code" => "UNAUTHENTICATED"
-        ], 403);
+        ]), 403);
     }
 }
