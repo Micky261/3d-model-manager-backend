@@ -38,5 +38,3 @@ Route::post("register", [AuthController::class, "register"]);
 // Register -> email verification
 Route::get("email/resend", [VerificationController::class, "resend"])->name("verification.resend");
 Route::get("email/verify/{id}/{hash}", [VerificationController::class, "verify"])->name("verification.verify");
-// TODO: Respond to notification
-Route::get("models", [ThreeDModelController::class, "getAllModels"])->name("verification.notification");
