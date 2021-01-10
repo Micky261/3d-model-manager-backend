@@ -25,15 +25,15 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     // 3D models
     Route::get("models", [ThreeDModelController::class, "getAllModels"]);
     Route::get("models/random/{num}", [ThreeDModelController::class, "getRandomModels"]);
-    Route::get("model/{id}", [ThreeDModelController::class, "getModel"]);
-    Route::post("model", [ThreeDModelController::class, "createModel"]);
+    Route::get("model/data/{id}", [ThreeDModelController::class, "getModel"]);
+    Route::post("model/data", [ThreeDModelController::class, "createModel"]);
     Route::post("model/import", [ThreeDModelController::class, "importModel"]);
-    Route::put("model/{id}", [ThreeDModelController::class, "updateModel"]);
+    Route::put("model/data/{id}", [ThreeDModelController::class, "updateModel"]);
     Route::delete("model/{id}", [ThreeDModelController::class, "deleteModel"]);
 
-    Route::get("model/{id}/tags", [ModelTagsController::class, "getTags"]);
-    Route::post("model/{id}/{tag}", [ModelTagsController::class, "setTag"]);
-    Route::delete("model/{id}/{tag}", [ModelTagsController::class, "removeTag"]);
+    Route::get("model/tag/{id}/tags", [ModelTagsController::class, "getTags"]);
+    Route::post("model/tag/{id}/{tag}", [ModelTagsController::class, "setTag"]);
+    Route::delete("model/tag/{id}/{tag}", [ModelTagsController::class, "removeTag"]);
 });
 
 // Login / Register
