@@ -32,15 +32,18 @@ class ModelTagsController extends Controller {
 
     public function setTag(Request $request, int $id, string $tag): JsonResponse|Response {
         $userId = auth()->id();
-
         if (DB::table("models")->where("user_id", $userId)->where("id", $id)->exists()) {
-            $modelTag = new ModelTags();
-            $modelTag->user_id = $userId;
-            $modelTag->model_id = $id;
-            $modelTag->tag = $tag;
-            $modelTag->save();
+            if (!DB::table("model_tags")->where("user_id", $userId)->where("model_id", $id)->where("tag", $tag)->exists()) {
+                $modelTag = new ModelTags();
+                $modelTag->user_id = $userId;
+                $modelTag->model_id = $id;
+                $modelTag->tag = $tag;
+                $modelTag->save();
 
-            return response()->json($modelTag);
+                return response()->json($modelTag);
+            } else {
+                return response(status: 200);
+            }
         } else {
             return response(status: 404);
         }
