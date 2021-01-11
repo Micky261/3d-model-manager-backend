@@ -59,7 +59,7 @@ class ModelTagsController extends Controller {
         if ($modelTag->exists()) {
             $modelTag->delete();
 
-            return response();
+            return response(status: 200);
         } else {
             return response(status: 404);
         }
