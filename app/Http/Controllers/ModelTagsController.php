@@ -9,8 +9,22 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ModelTagsController extends Controller {
+    public function getAllTags(Request $request): JsonResponse {
+        $userId = auth()->id();
+
+        return response()->json(
+            DB::table("model_tags")
+                ->select("tag", DB::raw("COUNT(tag) as count"))
+                ->where("user_id", $userId)
+                ->groupBy("tag")
+                ->orderBy("count")
+                ->get()
+        );
+    }
+
     public function getTags(Request $request, int $id): JsonResponse {
         $userId = auth()->id();
+
         return response()->json(
             DB::table("model_tags")->where("user_id", $userId)->where("id", $id)->get()
         );

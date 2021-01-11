@@ -34,6 +34,8 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::get("model/tags/{id}", [ModelTagsController::class, "getTags"]);
     Route::post("model/tag/{id}/{tag}", [ModelTagsController::class, "setTag"]);
     Route::delete("model/tag/{id}/{tag}", [ModelTagsController::class, "removeTag"]);
+
+    Route::get("tags/all", [ModelTagsController::class,"getAllTags"]);
 });
 
 // Login / Register
