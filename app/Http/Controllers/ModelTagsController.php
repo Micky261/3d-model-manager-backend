@@ -26,7 +26,7 @@ class ModelTagsController extends Controller {
         $userId = auth()->id();
 
         return response()->json(
-            DB::table("model_tags")->where("user_id", $userId)->where("id", $id)->get()
+            DB::table("model_tags")->where("user_id", $userId)->where("model_id", $id)->get()
         );
     }
 
@@ -50,7 +50,7 @@ class ModelTagsController extends Controller {
         $userId = auth()->id();
         $modelTag = DB::table("model_tags")
             ->where("user_id", $userId)
-            ->where("id", $id)
+            ->where("model_id", $id)
             ->where("tag", $tag);
 
         if ($modelTag->exists()) {
