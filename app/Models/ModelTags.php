@@ -14,4 +14,6 @@ class ModelTags extends Model
     protected $hidden = [
         "user_id"
     ];
+
+    public $timestamps = false;
 }
