@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ModelFilesController;
 use App\Http\Controllers\ThreeDModelController;
 use App\Http\Controllers\ModelTagsController;
 use App\Http\Controllers\VerificationController;
@@ -36,6 +37,8 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::delete("model/tag/{id}/{tag}", [ModelTagsController::class, "removeTag"]);
 
     Route::get("tags/all", [ModelTagsController::class,"getAllTags"]);
+
+    Route::post("model/file/{modelId}", [ModelFilesController::class, "saveFile"]);
 });
 
 // Login / Register
