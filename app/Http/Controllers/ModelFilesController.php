@@ -31,6 +31,8 @@ class ModelFilesController extends Controller {
 
             $filePath = "{$userId}/{$modelId}/{$type}/{$filename}";
             Storage::disk("local")->put($filePath, $fileContent);
+            $filesize = Storage::disk("local")->size($filePath);
+
             Storage::disk("local")->deleteDirectory($uploadFilePath);
 
             $dbRow = DB::table("model_files")->where([
@@ -47,6 +49,7 @@ class ModelFilesController extends Controller {
                 $modelFile->type = $type;
                 $modelFile->filename = $filename;
                 $modelFile->position = 999;
+                $modelFile->size = $filesize;
                 $modelFile->save();
             } else {
                 $dbRow->update([

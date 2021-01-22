@@ -20,6 +20,7 @@ class ModelFiles extends Migration
             $table->string("type");
             $table->string("filename");
             $table->integer("position");
+            $table->integer("size");
             $table->timestamps();
         });
     }
