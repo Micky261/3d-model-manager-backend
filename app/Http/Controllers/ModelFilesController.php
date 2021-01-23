@@ -3,12 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\ModelFiles;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ModelFilesController extends Controller {
+    public function getFilesWithType(Request $request, int $modelId, string $type): JsonResponse {
+        // Storage::disk('frontend')->getAdapter()->getPathPrefix();
+        $userId = auth()->id();
+
+
+        return response()->json(DB::table("model_files")->where([
+            ["user_id", "=", $userId],
+            ["model_Id", "=", $modelId],
+            ["type", "=", $type],
+        ])->get());
+    }
+
+    public function getFileWithType(Request $request, int $modelId, string $filename, string $type): BinaryFileResponse {
+        $userId = auth()->id();
+        $file = "{$userId}/{$modelId}/{$type}/{$filename}";
+
+        if (!Storage::disk("local")->exists($file)){
+            abort("404");
+        }
+        return response()->file(storage_path("app".DIRECTORY_SEPARATOR.$file));
+    }
+
     public function saveFile(Request $request, int $modelId): Response {
         $userId = auth()->id();
         $chunk = $request->chunk;
