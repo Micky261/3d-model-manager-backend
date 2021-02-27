@@ -38,6 +38,7 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
 
     Route::get("tags/all", [ModelTagsController::class,"getAllTags"]);
 
+    Route::get("model/files/{modelId}", [ModelFilesController::class, "getFiles"]);
     Route::get("model/files/{modelId}/{type}", [ModelFilesController::class, "getFilesWithType"]);
     Route::get("model/file/{modelId}/{filename}/{type}", [ModelFilesController::class, "getFileWithType"]);
     Route::post("model/file/{modelId}", [ModelFilesController::class, "saveFile"]);

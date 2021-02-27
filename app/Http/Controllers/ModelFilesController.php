@@ -11,8 +11,16 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ModelFilesController extends Controller {
+    public function getFiles(Request $request, int $modelId): JsonResponse {
+        $userId = auth()->id();
+
+        return response()->json(DB::table("model_files")->where([
+            ["user_id", "=", $userId],
+            ["model_Id", "=", $modelId],
+        ])->get());
+    }
+
     public function getFilesWithType(Request $request, int $modelId, string $type): JsonResponse {
-        // Storage::disk('frontend')->getAdapter()->getPathPrefix();
         $userId = auth()->id();
 
 
