@@ -16,7 +16,7 @@ class ModelFilesController extends Controller {
 
         return response()->json(DB::table("model_files")->where([
             ["user_id", "=", $userId],
-            ["model_Id", "=", $modelId],
+            ["model_id", "=", $modelId],
         ])->get());
     }
 
@@ -26,7 +26,7 @@ class ModelFilesController extends Controller {
 
         return response()->json(DB::table("model_files")->where([
             ["user_id", "=", $userId],
-            ["model_Id", "=", $modelId],
+            ["model_id", "=", $modelId],
             ["type", "=", $type],
         ])->get());
     }
@@ -35,10 +35,10 @@ class ModelFilesController extends Controller {
         $userId = auth()->id();
         $file = "{$userId}/{$modelId}/{$type}/{$filename}";
 
-        if (!Storage::disk("local")->exists($file)){
+        if (!Storage::disk("local")->exists($file)) {
             abort("404");
         }
-        return response()->file(storage_path("app".DIRECTORY_SEPARATOR.$file));
+        return response()->file(storage_path("app" . DIRECTORY_SEPARATOR . $file));
     }
 
     public function saveFile(Request $request, int $modelId): Response {
@@ -69,7 +69,7 @@ class ModelFilesController extends Controller {
 
             $dbRow = DB::table("model_files")->where([
                 ["user_id", "=", $userId],
-                ["model_Id", "=", $modelId],
+                ["model_id", "=", $modelId],
                 ["type", "=", $type],
                 ["filename", "=", $filename]
             ]);
