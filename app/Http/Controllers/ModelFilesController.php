@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use STS\ZipStream\ZipStream;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Zip;
 
 class ModelFilesController extends Controller {
     public function getFiles(Request $request, int $modelId): JsonResponse {
@@ -57,6 +59,28 @@ class ModelFilesController extends Controller {
                 ["user_id", "=", $userId],
                 ["model_id", "=", $modelId],
             ])->get());
+        } else {
+            return response(status: 404);
+        }
+    }
+
+    public function downloadZipFile(Request $request, int $modelId, string $type): JsonResponse|BinaryFileResponse|Response|ZipStream {
+        $userId = auth()->id();
+        $baseDir = "{$userId}/{$modelId}/" . (($type == "all") ? "" : "{$type}/");
+
+        if (Storage::disk("local")->exists($baseDir)) {
+            $filesForZip = array();
+
+            $files = Storage::disk("local")->allFiles($baseDir);
+            foreach ($files as $file) {
+                $name = basename($file);
+                info(Storage::disk('local')->path($file));
+                $filesForZip[Storage::disk('local')->path($file)] = $name;
+            }
+
+            info($filesForZip);
+
+            return Zip::create("zip.zip", $filesForZip);
         } else {
             return response(status: 404);
         }
