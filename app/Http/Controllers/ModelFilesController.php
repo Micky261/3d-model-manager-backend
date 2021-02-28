@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ModelFiles;
+use App\Models\ThreeDModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,6 +40,26 @@ class ModelFilesController extends Controller {
             abort("404");
         }
         return response()->file(storage_path("app" . DIRECTORY_SEPARATOR . $file));
+    }
+
+    public function updateFiles(Request $request, int $modelId): JsonResponse|Response {
+        $userId = auth()->id();
+
+        if (ThreeDModel::where("id", $modelId)->where("user_id", $userId)->exists()) {
+            foreach ($request->input() as $file) {
+                $modelFile = ModelFiles::find($file["id"]);
+                $modelFile->position = is_null($file["position"]) ? $modelFile->position : $file["position"];
+                $modelFile->type = is_null($file["type"]) ? $modelFile->type : $file["type"];
+                $modelFile->save();
+            }
+
+            return response()->json(DB::table("model_files")->where([
+                ["user_id", "=", $userId],
+                ["model_id", "=", $modelId],
+            ])->get());
+        } else {
+            return response(status: 404);
+        }
     }
 
     public function saveFile(Request $request, int $modelId): Response {
