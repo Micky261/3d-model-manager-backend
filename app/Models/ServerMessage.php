@@ -9,5 +9,5 @@ class ServerMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["message", "message_code", "model_id"];
+    protected $fillable = ["message", "message_code", "model_id", "additional_information"];
 }

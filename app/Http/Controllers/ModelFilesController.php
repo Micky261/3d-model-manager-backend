@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ModelFiles;
+use App\Models\ServerMessage;
 use App\Models\ThreeDModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,7 +52,31 @@ class ModelFilesController extends Controller {
             foreach ($request->input() as $file) {
                 $modelFile = ModelFiles::find($file["id"]);
                 $modelFile->position = is_null($file["position"]) ? $modelFile->position : $file["position"];
-                $modelFile->type = is_null($file["type"]) ? $modelFile->type : $file["type"];
+
+                if (!is_null($file["type"])) {
+                    $filename = $modelFile->filename;
+                    $oldFileType = $modelFile->type;
+                    $newFileType = $file["type"];
+
+                    $oldFile = "{$userId}/{$modelId}/{$oldFileType}/{$filename}";
+                    $newFile = "{$userId}/{$modelId}/{$newFileType}/{$filename}";
+
+                    if ($oldFile != $newFile) {
+                        if ($oldFile != $newFile)
+                            if (Storage::disk("local")->exists($newFile)) {
+                                return response()->json(new ServerMessage([
+                                    "message" => "Target path already exists.",
+                                    "message_code" => "TargetAlreadyExists",
+                                    "additional_information" => [$oldFileType, $newFileType, $filename]
+                                ]), 409);
+                            } else {
+                                Storage::disk("local")->move($oldFile, $newFile);
+                            }
+
+                        $modelFile->type = $newFileType;
+                    }
+                }
+
                 $modelFile->save();
             }
 
