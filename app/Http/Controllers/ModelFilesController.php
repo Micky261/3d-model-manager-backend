@@ -64,7 +64,7 @@ class ModelFilesController extends Controller {
         }
     }
 
-    public function downloadZipFile(Request $request, int $modelId, string $type): JsonResponse|BinaryFileResponse|Response|ZipStream {
+    public function downloadZipFile(Request $request, int $modelId, string $type): Response|ZipStream {
         $userId = auth()->id();
         $baseDir = "{$userId}/{$modelId}/" . (($type == "all") ? "" : "{$type}/");
 
@@ -73,12 +73,8 @@ class ModelFilesController extends Controller {
 
             $files = Storage::disk("local")->allFiles($baseDir);
             foreach ($files as $file) {
-                $name = basename($file);
-                info(Storage::disk('local')->path($file));
-                $filesForZip[Storage::disk('local')->path($file)] = $name;
+                $filesForZip[Storage::disk('local')->path($file)] = basename($file);
             }
-
-            info($filesForZip);
 
             return Zip::create("zip.zip", $filesForZip);
         } else {
