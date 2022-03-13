@@ -34,6 +34,8 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::get("models", [ThreeDModelController::class, "getAllModels"]);
     // Get a list of {num} random models
     Route::get("models/random/{num}", [ThreeDModelController::class, "getRandomModels"]);
+    // Get a list of the {num} newest models
+    Route::get("models/newest/{num}", [ThreeDModelController::class, "getNewestModels"]);
     // Get data for the specified model
     Route::get("model/data/{id}", [ThreeDModelController::class, "getModel"]);
     // Create a model (data via POST)

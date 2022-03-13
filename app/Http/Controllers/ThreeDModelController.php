@@ -6,6 +6,7 @@ use App\Models\ThreeDModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class ThreeDModelController extends Controller {
     public function getAllModels(Request $request): JsonResponse {
@@ -88,6 +89,22 @@ class ThreeDModelController extends Controller {
 
         if ($num > 0) {
             $threeDModels = ThreeDModel::where("user_id", $userId)->inRandomOrder()->limit($num)->get();
+
+            return response()->json($threeDModels);
+        } else {
+            return response(status: 400);
+        }
+    }
+
+    public function getNewestModels(int $num): JsonResponse|Response {
+        $userId = auth()->id();
+
+        if ($num > 0) {
+            $threeDModels = DB::table("models")
+                ->where("user_id", $userId)
+                ->orderBy("created_at", "desc")
+                ->limit($num)
+                ->get();
 
             return response()->json($threeDModels);
         } else {
