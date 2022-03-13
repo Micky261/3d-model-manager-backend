@@ -72,6 +72,8 @@ Route::middleware(["auth:sanctum", "verified"])->group(function () {
     Route::post("model/files/{modelId}", [ModelFilesController::class, "updateFiles"]);
     // Save a file for a model
     Route::post("model/file/{modelId}", [ModelFilesController::class, "saveFile"]);
+    // Delete the specified file assigned to a model
+    Route::delete("model/file/{modelId}/{filename}/{type}", [ModelFilesController::class, "deleteFile"]);
 });
 
 // Login / Register

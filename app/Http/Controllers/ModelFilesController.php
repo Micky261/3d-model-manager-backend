@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ModelFiles;
 use App\Models\ServerMessage;
 use App\Models\ThreeDModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,14 +37,37 @@ class ModelFilesController extends Controller {
         ])->get());
     }
 
-    public function getFileWithType(Request $request, int $modelId, string $filename, string $type): BinaryFileResponse {
+    public function getFileWithType(Request $request, int $modelId, string $filename, string $type): JsonResponse|BinaryFileResponse {
         $userId = auth()->id();
         $file = "{$userId}/{$modelId}/{$type}/{$filename}";
 
         if (!Storage::disk("local")->exists($file)) {
-            abort("404");
+            return response()->json(new ServerMessage([
+                "message" => "The given file could not be found on storage.",
+                "message_code" => "FileNotFoundOnStorage",
+                "additional_information" => [$type, $filename]
+            ]), 409);
         }
+
         return response()->file(storage_path("app" . DIRECTORY_SEPARATOR . $file));
+    }
+
+    public function deleteFile(Request $request, int $modelId, string $filename, string $type): Response {
+        $userId = auth()->id();
+        $file = "{$userId}/{$modelId}/{$type}/{$filename}";
+
+        if (Storage::disk("local")->exists($file)) {
+            Storage::disk("local")->delete($file);
+        }
+
+        DB::table("model_files")->where([
+            ["user_id", "=", $userId],
+            ["model_id", "=", $modelId],
+            ["filename", "=", $filename],
+            ["type", "=", $type],
+        ])->delete();
+
+        return response(status: 200);
     }
 
     public function updateFiles(Request $request, int $modelId): JsonResponse|Response {
